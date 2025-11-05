@@ -33,6 +33,7 @@ export function SurveyRequestModal({
         new Set()
     );
     const [loading, setLoading] = useState(true);
+    const [sending, setSending] = useState(false);
 
     useEffect(() => {
         loadData();
@@ -97,8 +98,10 @@ export function SurveyRequestModal({
         }
     };
 
-    const handleSend = () => {
-        onSend(Array.from(selectedStaff), Array.from(selectedEvents));
+    const handleSend = async () => {
+        setSending(true);
+        await onSend(Array.from(selectedStaff), Array.from(selectedEvents));
+        setSending(false);
     };
 
     const formatDate = (dateString: string) => {
@@ -244,7 +247,7 @@ export function SurveyRequestModal({
                             </button>
                             <button
                                 onClick={handleSend}
-                                disabled={!canSend}
+                                disabled={!canSend || sending}
                                 className="flex items-center space-x-2 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Send className="w-4 h-4" />
